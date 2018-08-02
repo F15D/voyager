@@ -8,6 +8,8 @@ use TCG\Voyager\Traits\HasRelationships;
 
 class Role extends Model
 {
+    protected $table = 'voyager_roles';
+
     use HasRelationships;
 
     protected $guarded = [];
@@ -16,13 +18,13 @@ class Role extends Model
     {
         $userModel = Voyager::modelClass('User');
 
-        return $this->belongsToMany($userModel, 'user_roles')
+        return $this->belongsToMany($userModel, 'voyager_user_roles')
                     ->select(app($userModel)->getTable().'.*')
                     ->union($this->hasMany($userModel))->getQuery();
     }
 
     public function permissions()
     {
-        return $this->belongsToMany(Voyager::modelClass('Permission'));
+        return $this->belongsToMany(Voyager::modelClass('Permission'), 'voyager_permission_role', 'role_id', 'permission_id');
     }
 }

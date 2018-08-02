@@ -35,21 +35,21 @@ class RolesTest extends TestCase
              ->type('Super Admin', 'display_name')
              ->press(__('voyager::generic.submit'))
              ->seePageIs(route('voyager.roles.index'))
-             ->seeInDatabase('roles', ['name' => 'superadmin']);
+             ->seeInDatabase('voyager_roles', ['name' => 'superadmin']);
 
         // Editing a Role
         $this->visit(route('voyager.roles.edit', 2))
              ->type('regular_user', 'name')
              ->press(__('voyager::generic.submit'))
              ->seePageIs(route('voyager.roles.index'))
-             ->seeInDatabase('roles', ['name' => 'regular_user']);
+             ->seeInDatabase('voyager_roles', ['name' => 'regular_user']);
 
         // Editing a Role
         $this->visit(route('voyager.roles.edit', 2))
              ->type('user', 'name')
              ->press(__('voyager::generic.submit'))
              ->seePageIs(route('voyager.roles.index'))
-             ->seeInDatabase('roles', ['name' => 'user']);
+             ->seeInDatabase('voyager_roles', ['name' => 'user']);
 
         // Get the current super admin role
         $superadmin_role = Role::where('name', '=', 'superadmin')->first();
@@ -57,6 +57,6 @@ class RolesTest extends TestCase
         // Deleting a Role
         $response = $this->call('DELETE', route('voyager.roles.destroy', $superadmin_role->id), ['_token' => csrf_token()]);
         $this->assertEquals(302, $response->getStatusCode());
-        $this->notSeeInDatabase('roles', ['name' => 'superadmin']);
+        $this->notSeeInDatabase('voyager_roles', ['name' => 'superadmin']);
     }
 }
